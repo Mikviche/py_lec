@@ -24,21 +24,21 @@ def probs(dices:list,type = 'p'):
         a += dice[0]*dice[1] 
         b = [i for i in range(1,dice[1]+1)]
         for _ in range(0,dice[0]): dice_sides.append(b)        # создаёт список из значений на стороных дайса
-    sums = dict.fromkeys(range(1,a+1), 0)                      # создаёт словарь нулей на все возможные суммы
+    sums = dict.fromkeys(range(1,a+1), 0)                      # создаёт словарь нулей на все возможные суммы (от единицы - так удобнее)
 
     denom = 0
-    for i in it.product(*dice_sides):                         # модуль комбинаторики перебирает все размещения с повторениями
-        s = sum(i)                                            # считаю сумму каждого размещения
-        sums[s] += 1                                          # по ключу полученной суммы добавлю единицу
+    for i in it.product(*dice_sides):                          # модуль комбинаторики перебирает все размещения с повторениями
+        s = sum(i)                                             # считаю сумму каждого размещения
+        sums[s] += 1                                           # по ключу полученной суммы добавлю единицу
         denom += 1
 
-    if type == "p":                                           # type = e/p для событий/вероятностей соответственно
+    if type == "p":                                            # type = e/p для событий/вероятностей соответственно
         for i in sums:
             sums[i] /= denom
             sums[i] *= 100
-    elif type == "e":                                         # если вывод в событиях, sums не меняется
+    elif type == "e":                                          # если вывод в событиях, sums не меняется
         pass
     else:
-        raise Exception("Argument error")                     # если введено что-то кроме e/p, генерируется исключение
+        raise Exception("Argument error")                      # если введено что-то кроме e/p, генерируется исключение
     
-    return dict(filter(lambda x: x[1] != 0 , sums.items()))
+    return dict(filter(lambda x: x[1] != 0 , sums.items()))    # на выход идёт словарь из которого исключены нулевые суммы
