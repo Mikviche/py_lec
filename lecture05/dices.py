@@ -16,15 +16,22 @@ def convert(a):
     return b
 
 # Подсчёт вероятностей
-def probs(dice,type = 'p'):
-    sums = dict.fromkeys(range(dice[0],dice[0]*dice[1]+1), 0) # создаёт словарь нулей на все возможные суммы
-    dice_sides = [i for i in range(1,dice[1]+1)]              # создаёт список из значений на стороных дайса
-    denom = dice[1]**dice[0]                                  # знаментаель: количество всех комбинаций
+def probs(dices:list,type = 'p'):
 
-    for i in it.product(dice_sides, repeat=dice[0]):          # модуль комбинаторики перебирает все размещения с повторениями
+    dice_sides = []
+    a = 0
+    for dice in dices:
+        a += dice[0]*dice[1] 
+        b = [i for i in range(1,dice[1]+1)]
+        for _ in range(0,dice[0]): dice_sides.append(b)        # создаёт список из значений на стороных дайса
+    sums = dict.fromkeys(range(1,a+1), 0)                      # создаёт словарь нулей на все возможные суммы
+
+    denom = 0
+    for i in it.product(*dice_sides):                         # модуль комбинаторики перебирает все размещения с повторениями
         s = sum(i)                                            # считаю сумму каждого размещения
         sums[s] += 1                                          # по ключу полученной суммы добавлю единицу
-    
+        denom += 1
+
     if type == "p":                                           # type = e/p для событий/вероятностей соответственно
         for i in sums:
             sums[i] /= denom
@@ -34,4 +41,4 @@ def probs(dice,type = 'p'):
     else:
         raise Exception("Argument error")                     # если введено что-то кроме e/p, генерируется исключение
     
-    return sums
+    return dict(filter(lambda x: x[1] != 0 , sums.items()))

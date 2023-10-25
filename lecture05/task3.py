@@ -7,7 +7,11 @@ while True:
         print("Wrong input, try again.")
         continue
 
-probstable = {}
+dices = []
 for dice in input_dices.split():
-    a = d.probs(d.convert(dice),"e")
-    print(a)
+    dices.append(d.convert(dice))
+
+probstable = d.probs(dices)
+for i in probstable:
+    print(f"{i:3}: {f'{round(probstable[i],3):.3f}':6} %")
+
